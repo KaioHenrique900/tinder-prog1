@@ -2,19 +2,38 @@
 import gerarConexoes as gCon
 import pickle
 
+def contLinhasHist(conexoes):
+    cont = 0
+    for u in conexoes:
+        for x in conexoes[u][0]:
+            cont+=1
+        for x in conexoes[u][2]:
+            cont += 1
+    return cont
+
 def backup(usuarios, conexoes):
     with open("D:\\IFES\\Prog II\\TRABALHO TINDER\\backup.bin", "wb") as f:
         pickle.dump(usuarios, f)
         pickle.dump(conexoes, f)
 
+    """with open("D:\\IFES\\Prog II\\TRABALHO TINDER\\historico.bin", "w") as f:
+        for u in conexoes:
+            for x in conexoes[u][1]:
+                t = (conexoes[u][1], x)
+                pickle.dump(t, f)
+            for x in conexoes[u][2]:
+                t = (conexoes[u][2], x)
+                pickle.dump(t, f)"""
+    
     with open("D:\\IFES\\Prog II\\TRABALHO TINDER\\historico.bin", "wb") as f:
-        for u in usuarios:
-            for x in usuarios[u][1]:
-                t = (usuarios[u][1], x)
-                pickle.dump(t)
-            for x in usuarios[u][2]:
-                t = (usuarios[u][2], x)
-                pickle.dump(t)
+        pickle.dump(str(contLinhasHist(conexoes)), f)
+        for u in conexoes:
+            for x in conexoes[u][0]:
+                t = (u, x)
+                pickle.dump(t, f)
+            for x in conexoes[u][2]:
+                t = (u, x)
+                pickle.dump(t, f)
 
 def main():
     #          {LOGIN : (LOGIN, CIDADE, NASCIMENTO)}
@@ -31,8 +50,15 @@ def main():
                 "thais": ([], ["will"], ["kaio"])
                 }
     
-    backup(usuarios, conexoes)
-    conexoes = gCon.gerarConexoes()
+    conexoes1 = {"kaio" : (["ju"], [], ["thais"]),
+                "ju" : (["thais"], ["kaio"], ["will"]),
+                "will" : (["thais"], [], ["ju"]),
+                "thais": ([], ["will", "ju"], ["kaio"]),
+                }
+    
+    backup(usuarios, conexoes1)
+    conexoes = gCon.gerarConexoes(conexoes)
+    print(conexoes)
 
 if __name__ == "__main__":
     main()

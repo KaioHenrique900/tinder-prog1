@@ -1,0 +1,6 @@
+('kaio', 'ju')
+('kaio', 'thais')
+('ju', 'will')
+('will', 'thais')
+('will', 'ju')
+('thais', 'kaio')
