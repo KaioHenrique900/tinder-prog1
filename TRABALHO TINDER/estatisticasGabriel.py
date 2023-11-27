@@ -5,7 +5,7 @@ def disputado(conexoes, usuario):
     
     # Utilizar a resposta dessa função dentro de um if para ordenar a lista segundo o 2° critério de ordenação no txt.
     tam = len(conexoes[usuario][1]) + len(conexoes[usuario][2])
-    
+    # Retorna a quantide de likes que ele tomou em inteiro
     return tam
 
 def ordenar_alfabeticamente(lista):
