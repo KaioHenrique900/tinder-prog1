@@ -32,7 +32,8 @@ def attConexoes(historico, conexoes):
 
 def gerarConexoes():
 
-    with open ("C:\\Users\\gsdog\\Downloads\\backup1000.bin", "rb") as f:
+    # Alterar o caminho para o encontrar o arquivo de acordo com o computador no qual for avaliado.
+    with open ("C:\\Users\\gsdog\\Downloads\\backup10000.bin", "rb") as f:
         usuarios = pickle.load(f)
         conexoes = pickle.load(f)
         historico = pickle.load(f)
@@ -44,11 +45,5 @@ def gerarConexoes():
     with open ("dados.bin", "wb") as arq:
         pickle.dump(usuarios, arq)
         pickle.dump(atualizados, arq)
-
-
-    #with open ("dados.bin", "rb") as arq:
-        #usuarios = pickle.load(arq)
-        #conexoes = pickle.load(arq)
-
 
     return arq
