@@ -1,18 +1,22 @@
 import pickle
 from gerarConexoes import gerarConexoes
 
+
+def quicksort(l, inf, sup, conexoes, usuarios):
+    if inf < sup:
+        pos =  particao(l,inf,sup, conexoes, usuarios)
+        quicksort(l,inf, pos-1, conexoes, usuarios)
+        quicksort(l,pos+1, sup, conexoes, usuarios)
+
+
+
 def disputado(conexoes, usuario):
     
     # Utilizar a resposta dessa função dentro de um if para ordenar a lista segundo o 2° critério de ordenação no txt.
     tam = len(conexoes[usuario][1]) + len(conexoes[usuario][2])
-    # Retorna a quantide de likes que ele tomou em inteiro
+    
     return tam
 
-def ordenar_alfabeticamente(lista):
-    
-    lista_ordenada = sorted(lista)
-    
-    return lista_ordenada
 
 def nomes(usuarios):
     #Retornar a lista de nomes para depois ordená-los alfabeticamente
@@ -22,25 +26,42 @@ def nomes(usuarios):
     
     return nomes
 
-def cidades(usuarios):
-    # Retornar a lista de cidades para depois ordená-las alfabeticamente
-    cidades = []
-    for logins in usuarios:
-        cidades.append(usuarios[logins][1])
+
+def particao(l, inf, sup, conexoes, usuarios):
+    pivot = l[inf]
+    i = inf+1
+    j = sup
+
+    while i <= j:
+        while i <= j and anterior(l[i], pivot, conexoes, usuarios):
+            i += 1
+        while j >= i and not anterior(l[j], pivot, conexoes, usuarios):
+            j -= 1
+        if i < j: 
+            l[i], l[j] = l[j], l[i]
+    l[inf], l[j] = l[j], l[inf]
     
-    return cidades
+    return j
 
 
-def main():
-    with open("dados.bin", "rb") as arq:
-        usuarios = pickle.load(arq)
-        conexoes = pickle.load(arq)
+def anterior(x, y, conexoes, usuarios):
+    if usuarios[x][1] < usuarios[y][1]: return True
+    if usuarios[x][1] > usuarios[y][1]: return False
 
-        logins = list(usuarios.keys())
-        CidadesUsuarios = (cidades(usuarios))
-        NomesUsuarios = (nomes(usuarios))
+    if disputado(conexoes, x) > disputado(conexoes, y): return True
+    if disputado(conexoes, x) < disputado(conexoes, y): return False
 
-        print(ordenar_alfabeticamente(NomesUsuarios))
+    if x < y: return True
+    
+    return False
 
-if __name__=="__main__":
-    main()   
+def buscarDados(listaLogins, usuarios):
+    with open ("top.txt", "w") as arq:
+        cidadeAnterior = ''
+        for login in listaLogins:
+            nome = usuarios[login][0]
+            cidade = usuarios[login][1]
+
+            if cidadeAnterior != cidade:
+                arq.write(cidade + " "+ nome+"\n")
+                cidadeAnterior = cidade  
